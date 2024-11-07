@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: apt-get update && apt-get install -y --no-install-recommends bash ca-certificates git tar xz-utils wget build-essential flex bison libssl-dev libelf-dev bc
+        run: apt-get update && apt-get install -y --no-install-recommends ca-certificates git tar xz-utils wget build-essential flex bison libssl-dev libelf-dev bc
 
       - name: Clone Steam Link SDK
         run: git clone https://github.com/ValveSoftware/steamlink-sdk.git steamlink-sdk
@@ -40,15 +40,16 @@ jobs:
         run: cp ./kernel-configs/${{ inputs.kernel_version }}.config ./linux-${{ inputs.kernel_version }}/.config
 
       - name: Build Kernel
-        run: bash -c "cd steamlink-sdk && \
-          source setenv.sh && \
-          mkdir boot && \
-          cd ../linux-${{ inputs.kernel_version }} && \
-          make oldconfig && \
-          make -j$(nproc) && \
-          make modules && \
-          mkdir /tmp/build-modules && \
-          INSTALL_MOD_PATH=/tmp/build-modules make modules_install"
+        run: |
+          mkdir boot
+          cd steamlink-sdk
+          . setenv.sh
+          cd ../linux-${{ inputs.kernel_version }}
+          make oldconfig
+          make -j$(nproc)
+          make modules -j$(nproc)
+          mkdir /tmp/build-modules
+          INSTALL_MOD_PATH=/tmp/build-modules make modules_install
 
       - name: Prepare Artifacts
         run: |
