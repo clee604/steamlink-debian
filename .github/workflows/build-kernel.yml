@@ -15,7 +15,7 @@ jobs:
   build-kernel:
     runs-on: ubuntu-latest
     container:
-      image: debian:bookworm-slim
+      image: debian:bookworm
     timeout-minutes: 15
     permissions:
       contents: read
