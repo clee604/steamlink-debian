@@ -1,0 +1,3 @@
+[submodule "steamlink-sdk"]
+	path = steamlink-sdk
+	url = https://github.com/ValveSoftware/steamlink-sdk

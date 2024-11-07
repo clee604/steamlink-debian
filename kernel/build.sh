@@ -2,6 +2,8 @@
 
 set -e
 
+export ARCH=arm; export LOCALVERSION="-steam"
+
 mkdir boot
 cd steamlink-sdk
 source setenv.sh
