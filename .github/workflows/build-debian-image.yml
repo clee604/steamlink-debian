@@ -52,6 +52,8 @@ jobs:
           mv /tmp/build-modules/lib/modules/${{ inputs.kernel_version }}-steam ../boot/
           mv arch/arm/boot/zImage ../boot/
           mv arch/arm/boot/dts/berlin2cd-valve-steamlink.dtb ../boot/
+          rm -rf ../boot/${{ inputs.kernel_version }}-steam/build
+          rm -rf ../boot/${{ inputs.kernel_version }}-steam/source
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -63,6 +65,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-kernel
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: "false"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -75,15 +82,7 @@ jobs:
           path: kernel
 
       - name: Build RootFS Docker Image
-        uses: docker/build-push-action@v6
-        with:
-          platforms: linux/arm/v7
-          push: false
-          tags: steamlink-debian:latest
-          file: rootfs/Dockerfile
-          build-args: |
-            KERNEL_VERSION=${{ inputs.kernel_version }}
-            DEBIAN_VERSION=${{ inputs.debian_version }}
+        run: docker buildx build --platform linux/arm/v7 --build-arg KERNEL_VERSION=${{ inputs.kernel_version }} --build-arg DEBIAN_VERSION=${{ inputs.debian_version }} --rm -f rootfs/Dockerfile --tag steamlink-debian:latest
 
       - name: Create RootFS tarball
         run: |

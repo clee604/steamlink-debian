@@ -1,5 +1,5 @@
-ARG DENIAN_VERSION=bullseye
-FROM docker.io/arm32v7/debian:$DENIAN_VERSION-slim
+ARG DEBIAN_VERSION=bullseye
+FROM docker.io/arm32v7/debian:$DEBIAN_VERSION-slim
 
 ARG KERNEL_VERSION=5.10.228
 
@@ -7,8 +7,6 @@ COPY ./kernel/ /boot/
 RUN mkdir -p /lib/modules && mv /boot/$KERNEL_VERSION-steam /lib/modules/$KERNEL_VERSION-steam
 
 COPY ./rootfs/usr/bin/* /usr/bin/
-RUN chmod 755 /usr/bin/kexec
-
 COPY ./rootfs/steamlink/ /steamlink/
 
 # Enable non-free repositories
