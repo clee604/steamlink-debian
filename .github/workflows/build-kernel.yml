@@ -55,7 +55,7 @@ jobs:
           mv arch/arm/boot/dts/berlin2cd-valve-steamlink.dtb
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: kernel-${{ inputs.kernel_version }}
           path: boot/
