@@ -15,7 +15,7 @@ jobs:
   build-kernel:
     runs-on: ubuntu-latest
     container:
-      image: debian:bookworm
+      image: debian:bookworm-slim
     timeout-minutes: 15
     permissions:
       contents: read
@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: apt-get update && apt-get install -y --no-install-recommends git tar xz-utils wget build-essential flex bison libssl-dev libelf-dev bc
+        run: apt-get update && apt-get install -y --no-install-recommends ca-certificates git tar xz-utils wget build-essential flex bison libssl-dev libelf-dev bc
 
       - name: Clone Steam Link SDK
         run: git clone https://github.com/ValveSoftware/steamlink-sdk.git steamlink-sdk
