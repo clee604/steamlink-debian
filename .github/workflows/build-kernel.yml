@@ -14,8 +14,6 @@ on:
 jobs:
   build-kernel:
     runs-on: ubuntu-latest
-    container:
-      image: debian:bookworm-slim
     timeout-minutes: 15
     permissions:
       contents: read
@@ -40,15 +38,14 @@ jobs:
         run: cp ./kernel-configs/${{ inputs.kernel_version }}.config ./linux-${{ inputs.kernel_version }}/.config
 
       - name: Build Kernel
-        run: |
-          mkdir boot
-          cd steamlink-sdk
-          bash setenv.sh
-          cd ../linux-${{ inputs.kernel_version }}
-          make oldconfig
-          make -j$(nproc)
-          make modules -j$(nproc)
-          mkdir /tmp/build-modules
+        run: mkdir boot && \
+          cd steamlink-sdk && \
+          source setenv.sh && \
+          cd ../linux-${{ inputs.kernel_version }} && \
+          make oldconfig && \
+          make -j$(nproc) && \
+          make modules && \
+          mkdir /tmp/build-modules && \
           INSTALL_MOD_PATH=/tmp/build-modules make modules_install
 
       - name: Prepare Artifacts
