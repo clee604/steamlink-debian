@@ -82,12 +82,19 @@ jobs:
           path: kernel
 
       - name: Build RootFS Docker Image
-        run: docker buildx build --platform linux/arm/v7 --build-arg KERNEL_VERSION=${{ inputs.kernel_version }} --build-arg DEBIAN_VERSION=${{ inputs.debian_version }} --rm -f rootfs/Dockerfile --tag steamlink-debian:latest .
+        run: docker buildx build --platform linux/arm/v7 --build-arg KERNEL_VERSION=${{ inputs.kernel_version }} --build-arg DEBIAN_VERSION=${{ inputs.debian_version }} --rm -f rootfs/Dockerfile --tag steamlink-debian:latest --output type=docker,dest=steamlink-debian.tar .
 
       - name: Create RootFS tarball
         run: |
-          docker create --platform linux/arm/v7 -t -i --name steamlink-debian-rootfs steamlink-debian:latest
+          docker load -i steamlink-debian.tar
+          docker create -t -i --name steamlink-debian-rootfs steamlink-debian:latest
           docker export steamlink-debian-rootfs -o rootfs.tar
+
+      - name: Upload RootFS tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}-rootfs
+          path: rootfs.tar
 
       - name: Create disk image
         run: |
@@ -104,5 +111,5 @@ jobs:
       - name: Upload disk image
         uses: actions/upload-artifact@v4
         with:
-          name: steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}
+          name: steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}-image
           path: steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}.img
