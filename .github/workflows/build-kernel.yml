@@ -35,7 +35,7 @@ jobs:
         run: tar -xf linux-${{ inputs.kernel_version }}.tar.xz
 
       - name: Copy Kernel Config
-        run: cp ./kernel-configs/${{ inputs.kernel_version }}.config ./linux-${{ inputs.kernel_version }}/.config
+        run: cp ./kernel/${{ inputs.kernel_version }}.config ./linux-${{ inputs.kernel_version }}/.config
 
       - name: Build Kernel
         env:
