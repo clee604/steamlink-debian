@@ -38,15 +38,9 @@ jobs:
         run: cp ./kernel-configs/${{ inputs.kernel_version }}.config ./linux-${{ inputs.kernel_version }}/.config
 
       - name: Build Kernel
-        run: mkdir boot && \
-          cd steamlink-sdk && \
-          source setenv.sh && \
-          cd ../linux-${{ inputs.kernel_version }} && \
-          make oldconfig && \
-          make -j$(nproc) && \
-          make modules && \
-          mkdir /tmp/build-modules && \
-          INSTALL_MOD_PATH=/tmp/build-modules make modules_install
+        env:
+          KERNEL_VERSION: ${{ inputs.kernel_version }}
+        run: ./kernel/build.sh
 
       - name: Prepare Artifacts
         run: |
