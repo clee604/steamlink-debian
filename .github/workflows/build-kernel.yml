@@ -20,13 +20,13 @@ jobs:
       contents: read
 
     steps:
+      - name: Install dependencies
+        run: apt-get update && apt-get install -y --no-install-recommends bash ca-certificates git tar xz-utils wget build-essential flex bison libssl-dev libelf-dev bc
+
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
           submodules: "true"
-
-      - name: Install dependencies
-        run: apt-get update && apt-get install -y --no-install-recommends bash ca-certificates git tar xz-utils wget build-essential flex bison libssl-dev libelf-dev bc
 
       - name: Download Kernel
         run: wget https://cdn.kernel.org/pub/linux/kernel/${{ inputs.kernel_branch }}/linux-${{ inputs.kernel_version }}.tar.xz
