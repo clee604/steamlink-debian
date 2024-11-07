@@ -65,6 +65,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-kernel
     steps:
+      - name: Install dependencies
+        run: apt-get update && apt-get install -y --no-install-recommends bash parted xz-utils
+
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
@@ -79,7 +82,7 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: kernel-${{ inputs.kernel_version }}-steam
-          path: kernel
+          path: kernel-${{ inputs.kernel_version }}
 
       - name: Build RootFS Docker Image
         run: docker buildx build --platform linux/arm/v7 --build-arg KERNEL_VERSION=${{ inputs.kernel_version }} --build-arg DEBIAN_VERSION=${{ inputs.debian_version }} --rm -f rootfs/Dockerfile --tag steamlink-debian:latest --output type=docker,dest=steamlink-debian.tar .
@@ -97,19 +100,16 @@ jobs:
           path: rootfs.tar
 
       - name: Create disk image
-        run: |
-          dd if=/dev/zero of=steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}.img bs=1M count=2048
-          mkfs.ext3 steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}.img
+        env:
+          KERNEL_VERSION: ${{ inputs.kernel_version }}
+          DEBIAN_VERSION: ${{ inputs.debian_version }}
+        run: sudo ./rootfs/build.sh
 
-      - name: Extract RootFS
-        run: |
-          sudo mkdir /mnt/disk
-          sudo mount steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}.img /mnt/disk
-          sudo tar -xpf rootfs.tar -C /mnt/disk/
-          sudo umount -l steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}.img
+      - name: Compress disk image
+        run: xz -z steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}.img
 
       - name: Upload disk image
         uses: actions/upload-artifact@v4
         with:
           name: steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}-image
-          path: steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}.img
+          path: steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}.img.xz

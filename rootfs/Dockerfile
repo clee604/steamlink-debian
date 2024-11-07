@@ -3,7 +3,7 @@ FROM docker.io/arm32v7/debian:$DEBIAN_VERSION-slim
 
 ARG KERNEL_VERSION=5.10.228
 
-COPY ./kernel/ /boot/
+COPY ./kernel-$KERNEL_VERSION/ /boot/
 RUN mkdir -p /lib/modules && mv /boot/$KERNEL_VERSION-steam /lib/modules/$KERNEL_VERSION-steam
 
 COPY ./rootfs/usr/bin/* /usr/bin/
