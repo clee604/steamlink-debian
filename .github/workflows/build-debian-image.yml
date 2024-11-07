@@ -82,7 +82,7 @@ jobs:
           path: kernel
 
       - name: Build RootFS Docker Image
-        run: docker buildx build --platform linux/arm/v7 --build-arg KERNEL_VERSION=${{ inputs.kernel_version }} --build-arg DEBIAN_VERSION=${{ inputs.debian_version }} --rm -f rootfs/Dockerfile --tag steamlink-debian:latest
+        run: docker buildx build --platform linux/arm/v7 --build-arg KERNEL_VERSION=${{ inputs.kernel_version }} --build-arg DEBIAN_VERSION=${{ inputs.debian_version }} --rm -f rootfs/Dockerfile --tag steamlink-debian:latest .
 
       - name: Create RootFS tarball
         run: |
