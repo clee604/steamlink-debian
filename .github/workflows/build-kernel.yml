@@ -1,0 +1,61 @@
+name: Build Kernel
+on:
+  workflow_dispatch:
+    inputs:
+      kernel_version:
+        description: "Kernel version to build"
+        required: true
+        default: "5.10.228"
+      kernel_branch:
+        description: "Kernel branch to build"
+        required: true
+        default: "v5.x"
+
+jobs:
+  build-kernel:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends git tar xz-utils wget build-essential flex bison libssl-dev libelf-dev bc
+
+      - name: Clone Steam Link SDK
+        run: git clone https://github.com/ValveSoftware/steamlink-sdk.git steamlink-sdk
+
+      - name: Download Kernel
+        run: wget https://cdn.kernel.org/pub/linux/kernel/${{ inputs.kernel_branch }}/linux-${{ inputs.kernel_version }}.tar.xz
+
+      - name: Extract Kernel
+        run: tar -xvf linux-${{ inputs.kernel_version }}.tar.xz
+
+      - name: Copy Kernel Config
+        run: cp ./kernel-configs/${{ inputs.kernel_version }}.config ./linux-${{ inputs.kernel_version }}/.config
+
+      - name: Build Kernel
+        run: |
+          mkdir boot
+          cd steamlink-sdk
+          source setenv.sh
+          cd ../linux-${{ inputs.kernel_version }}
+          make oldconfig
+          make -j$(nproc)
+          make modules -j$(nproc)
+          mkdir /tmp/build-modules
+          INSTALL_MOD_PATH=/tmp/build-modules make modules_install
+
+      - name: Prepare Artifacts
+        run: |
+          mv /tmp/build-modules/lib/modules/${{ inputs.kernel_version }} ../boot/
+          mv arch/arm/boot/zImage ../boot/
+          mv arch/arm/boot/dts/berlin2cd-valve-steamlink.dtb
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: kernel-${{ inputs.kernel_version }}
+          path: boot/
