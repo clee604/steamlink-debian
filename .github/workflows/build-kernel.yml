@@ -26,7 +26,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends git tar xz-utils wget build-essential flex bison libssl-dev libelf-dev bc
 
       - name: Clone Steam Link SDK
-        run: git clone --depth 1 https://github.com/ValveSoftware/steamlink-sdk.git steamlink-sdk
+        run: git clone https://github.com/ValveSoftware/steamlink-sdk.git steamlink-sdk
 
       - name: Download Kernel
         run: wget https://cdn.kernel.org/pub/linux/kernel/${{ inputs.kernel_branch }}/linux-${{ inputs.kernel_version }}.tar.xz
