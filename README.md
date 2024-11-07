@@ -1,5 +1,6 @@
 # steamlink-debian
-Debian GNU/Linux on the Valve Steam Link
+
+This repository provides a way to run Debian GNU/Linux on a Valve Steam Link device using a USB stick.
 
 ```
 djmuted@steamlink:~$ fastfetch
@@ -22,38 +23,51 @@ djmuted@steamlink:~$ fastfetch
              `"""
 ```
 
-## Default passwords:
+## How to use
 
-> :warning: **Recommended**: Consider changing your passwords with `passwd` after first login
+Download an image of Debian version of your choice from the [Releases](https://github.com/djmuted/steamlink-debian/releases) page and flash it on a 2GB (or bigger) USB stick using [balenaEtcher](https://etcher.balena.io/) or any other USB flasher. SD cards paired with a USB SD Reader work as well.
+
+> :warning: **Warning**: Flashing the image on the USB stick will wipe all data stored on the device!
+
+## Default passwords
+
+> :warning: **Recommended**: Consider changing your passwords with `passwd` after first login.
 
 ### Default user
+
 User: `debian`
 password: `steamlink`
 
 ### Root user
+
 User: `root`
 password: `root`
 
 ## First boot
-For the first boot a LAN connection is required. Once the new kernel starts booting, there will be no HDMI output anymore. Connect to the Steam Link via SSH. Local IP address can be found in your router's DHCP table. 
+
+For the first boot a LAN connection is required. Once the new kernel starts booting, there will be no HDMI output anymore. Connect to the Steam Link via SSH. Local IP address can be found in your router's DHCP table.
 
 ### Change hostname
+
 ```bash
 sudo hostnamectl set-hostname steamlink
 sudo echo "127.0.0.1 steamlink" >> /etc/hosts
 ```
 
 ### Fix date and time (RTC does not work yet)
+
 ```bash
 sudo ntpdate ntp.ubuntu.com
 ```
 
 ### Resize root partition to full disk size
+
 ```bash
 sudo resize2fs /dev/sda1
 ```
 
 ## What does not work
+
 - NAND driver
 - DMA controller
 - video/audio output
@@ -61,4 +75,7 @@ sudo resize2fs /dev/sda1
 - RTC
 
 ## Credits
-Based on [Getting Linux on Valve Steam Link](https://heap.ovh/getting-linux-on-valve-steam-link.html) and [Docker Debian bootstrap script](https://github.com/copy/v86)
+
+- [Getting Linux on Valve Steam Link from heap.ovh](https://heap.ovh/getting-linux-on-valve-steam-link.html)
+- [Docker Debian bootstrap script from v86 project](https://github.com/copy/v86)
+- [regmibijay/steamlink-archlinux GitHub repository](https://github.com/regmibijay/steamlink-archlinux)
