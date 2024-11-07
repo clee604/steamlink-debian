@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: apt-get update && apt-get install -y --no-install-recommends ca-certificates git tar xz-utils wget build-essential flex bison libssl-dev libelf-dev bc
+        run: apt-get update && apt-get install -y --no-install-recommends bash ca-certificates git tar xz-utils wget build-essential flex bison libssl-dev libelf-dev bc
 
       - name: Clone Steam Link SDK
         run: git clone https://github.com/ValveSoftware/steamlink-sdk.git steamlink-sdk
@@ -43,7 +43,7 @@ jobs:
         run: |
           mkdir boot
           cd steamlink-sdk
-          . setenv.sh
+          bash setenv.sh
           cd ../linux-${{ inputs.kernel_version }}
           make oldconfig
           make -j$(nproc)
