@@ -1,15 +1,15 @@
-FROM docker.io/arm32v7/debian:bullseye-slim
+ARG DENIAN_VERSION=bullseye
+FROM docker.io/arm32v7/debian:$DENIAN_VERSION-slim
 
 ARG KERNEL_VERSION=5.10.228
 
-COPY ./boot/ /boot/
+COPY ./kernel/ /boot/
 RUN mkdir -p /lib/modules && mv /boot/$KERNEL_VERSION-steam /lib/modules/$KERNEL_VERSION-steam
 
-COPY ./usr/bin/kexec /usr/bin/kexec
+COPY ./rootfs/usr/bin/* /usr/bin/
 RUN chmod 755 /usr/bin/kexec
-COPY ./steamlink/factory_test/run.sh /steamlink/factory_test/run.sh
-RUN chmod 755 /steamlink/factory_test/run.sh
-RUN mkdir -p /steamlink/config/system/ && echo "True" > /steamlink/config/system/enable_ssh.txt
+
+COPY ./rootfs/steamlink/ /steamlink/
 
 # Enable non-free repositories
 RUN sed -i 's/main/main contrib non-free/' /etc/apt/sources.list
