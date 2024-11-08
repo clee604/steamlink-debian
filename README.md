@@ -53,14 +53,6 @@ sudo hostnamectl set-hostname steamlink
 echo '127.0.0.1 steamlink' | sudo tee -a /etc/hosts
 ```
 
-### Sync date and time
-
-Since we don't have an RTC, you might have to do that after each reboot.
-
-```bash
-sudo ntpdate ntp.ubuntu.com
-```
-
 ### Resize root partition to full disk size
 
 Resize the partition to take the entire space:
