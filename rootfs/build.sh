@@ -29,5 +29,8 @@ umount -l /mnt/disk
 # Detach the loop device
 losetup -d $LOOP_DEV
 
+# Compress the image file
+xz -z steamlink-debian.img
+
 # Make the image file readable for non-root users
-chmod a+r steamlink-debian.img
+chmod 777 steamlink-debian.img.xz

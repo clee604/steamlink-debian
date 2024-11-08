@@ -102,9 +102,8 @@ jobs:
       - name: Create disk image
         run: sudo ./rootfs/build.sh
 
-      - name: Compress disk image
+      - name: Prepare compressed disk image
         run: |
-          xz -z steamlink-debian.img
           mv steamlink-debian.img.xz steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}.img.xz
 
       - name: Upload disk image
