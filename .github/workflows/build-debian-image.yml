@@ -52,6 +52,7 @@ jobs:
           mv /tmp/build-modules/lib/modules/${{ inputs.kernel_version }}-steam ../boot/
           mv arch/arm/boot/zImage ../boot/
           mv $(find . -name berlin2cd-valve-steamlink.dtb) ../boot/
+          mv .config ../boot/config-${{ inputs.kernel_version }}-steam
           rm -rf ../boot/${{ inputs.kernel_version }}-steam/build
           rm -rf ../boot/${{ inputs.kernel_version }}-steam/source
 
