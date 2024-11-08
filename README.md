@@ -38,23 +38,22 @@ Download an image of Debian version of your choice from the [Releases](https://g
 User: `debian`
 password: `steamlink`
 
-### Root user
-
-User: `root`
-password: `root`
-
 ## First boot
 
 For the first boot a LAN connection is required. Once the new kernel starts booting, there will be no HDMI output anymore. Connect to the Steam Link via SSH. Local IP address can be found in your router's DHCP table.
 
 ### Change hostname
 
+This the first thing you should do after logging in, some commands might not work without a proper hostname.
+
 ```bash
 sudo hostnamectl set-hostname steamlink
 sudo echo "127.0.0.1 steamlink" >> /etc/hosts
 ```
 
-### Fix date and time (RTC does not work yet)
+### Sync date and time
+
+Since we don't have an RTC, you might have to do that after each reboot.
 
 ```bash
 sudo ntpdate ntp.ubuntu.com
@@ -62,9 +61,19 @@ sudo ntpdate ntp.ubuntu.com
 
 ### Resize root partition to full disk size
 
+Resize the partition to take the entire space:
+
 ```bash
+sudo parted /dev/sda resizepart 1 100%
+```
+
+Confirm with `Yes` and press enter, then resize the filesystem:
+
+```
 sudo resize2fs /dev/sda1
 ```
+
+This might take a while, depending on your disk size.
 
 ## What does not work
 

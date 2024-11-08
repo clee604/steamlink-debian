@@ -14,17 +14,16 @@ COPY ./rootfs/steamlink/ /steamlink/
 RUN sed -i 's/main/main contrib non-free/' /etc/apt/sources.list
 
 # Install basic system components
-RUN apt-get update && apt-get install -y --no-install-recommends systemd dbus ca-certificates dhcpcd5 nano vim openssh-server ntpdate sudo ifupdown net-tools udev iputils-ping wget dosfstools unzip binutils libatomic1 initramfs-tools e2fsprogs firmware-libertas wireless-regdb
+RUN apt-get update && apt-get install -y --no-install-recommends systemd dbus ca-certificates dhcpcd5 nano vim openssh-server ntpdate sudo ifupdown net-tools udev iputils-ping wget dosfstools unzip binutils libatomic1 initramfs-tools e2fsprogs parted firmware-libertas wireless-regdb
 
 # Create initramfs
 RUN mkinitramfs -o /boot/initramfs-linux-steam.img $KERNEL_VERSION-steam
 
-RUN useradd -m debian
+RUN useradd -s /bin/bash -m debian
 RUN echo "debian:steamlink" | chpasswd
-RUN echo "root:root" | chpasswd
 
-# Enable ssh as root
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+# Add debian user to sudoers
+RUN usermod -a -G sudo debian
 
 # Enable basic services
 RUN systemctl enable ssh
