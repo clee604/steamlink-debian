@@ -13,9 +13,9 @@ COPY ./rootfs/steamlink/ /steamlink/
 
 # Add repositories
 RUN rm -rf /etc/apt/sources.list.d/* || true
-RUN echo "deb http://deb.debian.org/debian $DEBIAN_VERSION main non-free-firmware" > /etc/apt/sources.list
-RUN echo "deb http://security.debian.org/debian-security $DEBIAN_VERSION-security main non-free-firmware" >> /etc/apt/sources.list
-RUN echo "deb http://deb.debian.org/debian $DEBIAN_VERSION-updates main non-free-firmware" >> /etc/apt/sources.list
+RUN echo "deb http://deb.debian.org/debian $DEBIAN_VERSION main non-free non-free-firmware" > /etc/apt/sources.list
+RUN echo "deb http://security.debian.org/debian-security $DEBIAN_VERSION-security main non-free non-free-firmware" >> /etc/apt/sources.list
+RUN echo "deb http://deb.debian.org/debian $DEBIAN_VERSION-updates main non-free non-free-firmware" >> /etc/apt/sources.list
 
 # Install basic system components
 RUN apt-get update && apt-get install -y --no-install-recommends systemd dbus ca-certificates dhcpcd5 nano vim openssh-server ntpdate sudo ifupdown net-tools udev iputils-ping wget dosfstools unzip binutils libatomic1 initramfs-tools e2fsprogs parted firmware-libertas wireless-regdb
