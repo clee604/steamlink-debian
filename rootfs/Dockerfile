@@ -21,7 +21,7 @@ RUN echo "deb http://deb.debian.org/debian $DEBIAN_VERSION-updates main non-free
 RUN if [ "$DEBIAN_VERSION" = "bullseye" ]; then sed -i 's/non-free-firmware//g' /etc/apt/sources.list; fi
 
 # Install basic system components
-RUN apt-get update && apt-get install -y --no-install-recommends systemd dbus ca-certificates dhcpcd5 nano vim openssh-server sudo ifupdown net-tools udev iputils-ping wget dosfstools unzip binutils libatomic1 initramfs-tools e2fsprogs parted firmware-libertas wireless-regdb
+RUN apt-get update && apt-get install -y --no-install-recommends systemd systemd-timesyncd dbus ca-certificates dhcpcd5 nano vim openssh-server sudo ifupdown net-tools udev iputils-ping wget dosfstools unzip binutils libatomic1 initramfs-tools e2fsprogs parted firmware-libertas wireless-regdb
 
 # Create initramfs
 RUN mkinitramfs -o /boot/initramfs-linux-steam.img $KERNEL_VERSION-steam
