@@ -100,13 +100,12 @@ jobs:
           path: rootfs.tar
 
       - name: Create disk image
-        env:
-          KERNEL_VERSION: ${{ inputs.kernel_version }}
-          DEBIAN_VERSION: ${{ inputs.debian_version }}
         run: sudo ./rootfs/build.sh
 
       - name: Compress disk image
-        run: xz -z steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}.img
+        run: |
+          xz -z steamlink-debian.img
+          mv steamlink-debian.img.xz steamlink-debian-${{ inputs.debian_version }}-${{ inputs.kernel_version }}.img.xz
 
       - name: Upload disk image
         uses: actions/upload-artifact@v4
