@@ -12,7 +12,7 @@ COPY ./rootfs/usr/bin/* /usr/bin/
 COPY ./rootfs/steamlink/ /steamlink/
 
 # Add repositories
-RUN rm -rf /etc/apt/sources.list.d/*
+RUN rm -rf /etc/apt/sources.list.d/* || true
 RUN echo "deb http://deb.debian.org/debian $DEBIAN_VERSION main non-free-firmware" > /etc/apt/sources.list
 RUN echo "deb http://security.debian.org/debian-security $DEBIAN_VERSION-security main non-free-firmware" >> /etc/apt/sources.list
 RUN echo "deb http://deb.debian.org/debian $DEBIAN_VERSION-updates main non-free-firmware" >> /etc/apt/sources.list
