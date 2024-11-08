@@ -6,6 +6,7 @@ ARG KERNEL_VERSION=5.10.228
 COPY ./kernel-$KERNEL_VERSION/ /boot/
 RUN mkdir -p /lib/modules && mv /boot/$KERNEL_VERSION-steam /lib/modules/$KERNEL_VERSION-steam
 
+COPY ./rootfs/boot/* /boot/
 COPY ./rootfs/usr/bin/* /usr/bin/
 COPY ./rootfs/steamlink/ /steamlink/
 
@@ -13,7 +14,7 @@ COPY ./rootfs/steamlink/ /steamlink/
 RUN sed -i 's/main/main contrib non-free/' /etc/apt/sources.list
 
 # Install basic system components
-RUN apt-get update && apt-get install -y --no-install-recommends systemd dbus ca-certificates dhcpcd5 nano vim openssh-server ntpdate sudo ifupdown net-tools udev iputils-ping wget dosfstools unzip binutils libatomic1 initramfs-tools e2fsprogs firmware-libertas
+RUN apt-get update && apt-get install -y --no-install-recommends systemd dbus ca-certificates dhcpcd5 nano vim openssh-server ntpdate sudo ifupdown net-tools udev iputils-ping wget dosfstools unzip binutils libatomic1 initramfs-tools e2fsprogs firmware-libertas wireless-regdb
 
 # Create initramfs
 RUN mkinitramfs -o /boot/initramfs-linux-steam.img $KERNEL_VERSION-steam

@@ -9,17 +9,23 @@ dd if=/dev/zero of=$IMG_FILE bs=1M count=1024
 parted --script $IMG_FILE mklabel msdos        # Create an msdos partition table
 parted --script $IMG_FILE mkpart primary ext3 1MiB 100%  # Create a primary partition
 
+sync
+
 # Set up a loop device with partition mapping
 LOOP_DEV=$(losetup --show -P -f $IMG_FILE)
+
+sync
 
 # Format the first partition with ext3
 mkfs.ext3 "${LOOP_DEV}p1"
 
+sync
+
 # Mount the partition
 mkdir /mnt/disk
-mount steamlink-debian-$DEBIAN_VERSION-$KERNEL_VERSION.img /mnt/disk
+mount "${LOOP_DEV}p1" /mnt/disk
 tar -xpf rootfs.tar -C /mnt/disk/
-umount -l steamlink-debian-$DEBIAN_VERSION-$KERNEL_VERSION.img
+umount -l /mnt/disk
 
 # Detach the loop device
 losetup -d $LOOP_DEV
