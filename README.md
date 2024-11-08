@@ -29,6 +29,8 @@ Download an image of Debian version of your choice from the [Releases](https://g
 
 > :warning: **Warning**: Flashing the image on the USB stick will wipe all data stored on the device!
 
+Plug the USB stick into the Steam Link and power it on. The device will boot from the USB stick and appear on your network soon.
+
 ## Default passwords
 
 > :warning: **Recommended**: Consider changing your passwords with `passwd` after first login.
