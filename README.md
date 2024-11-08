@@ -3,20 +3,20 @@
 This repository provides a way to run Debian GNU/Linux on a Valve Steam Link device using a USB stick.
 
 ```
-djmuted@steamlink:~$ fastfetch
-       _,met$$$$$gg.           djmuted@steamlink
-    ,g$$$$$$$$$$$$$$$P.        ---------------
-  ,g$$P"         """Y$$.".     OS: Debian GNU/Linux bullseye 11.11 armv7l
+debian@steamlink:~$ fastfetch
+       _,met$$$$$gg.           debian@steamlink
+    ,g$$$$$$$$$$$$$$$P.        ----------------
+  ,g$$P"         """Y$$.".     OS: Debian GNU/Linux bookworm 12.7 armv7l
  ,$$P'               `$$$.     Host: Valve Steam Link
-',$$P       ,ggs.     `$$b:    Kernel: Linux 5.10.228
-`d$$'     ,$P"'   .    $$$     Uptime: 10 hours, 40 mins
- $$P      d$'     ,    $$$P    Packages: 363 (dpkg)
- $$:      $.   -    ,d$$'      Shell: bash 5.1.4
- $$;      Y$b._   _,d$P'       Terminal: /dev/pts/1
+',$$P       ,ggs.     `$$b:    Kernel: Linux 6.1.115-steam
+`d$$'     ,$P"'   .    $$$     Uptime: 9 mins
+ $$P      d$'     ,    $$$P    Packages: 191 (dpkg)
+ $$:      $.   -    ,d$$'      Shell: bash 5.2.15
+ $$;      Y$b._   _,d$P'       Terminal: /dev/pts/0
  Y$$.    `.`"Y$$$$P"'          CPU: Marvell Berlin
- `$$b      "-.__               Memory: 63.55 MiB / 498.16 MiB (13%)
+ `$$b      "-.__               Memory: 29.66 MiB / 498.16 MiB (6%)
   `Y$$                         Swap: Disabled
-   `Y$$.                       Disk (/): 2.78 GiB / 7.23 GiB (38%) - ext3 [External]
+   `Y$$.                       Disk (/): 325.80 MiB / 989.67 MiB (33%) - ext3 [External]
      `$$b.                     Local IP (eth0): 192.168.1.7/24
        `Y$$b.                  Locale: C
           `"Y$b._
@@ -48,7 +48,7 @@ This the first thing you should do after logging in, some commands might not wor
 
 ```bash
 sudo hostnamectl set-hostname steamlink
-sudo echo "127.0.0.1 steamlink" >> /etc/hosts
+echo '127.0.0.1 steamlink' | sudo tee -a /etc/hosts
 ```
 
 ### Sync date and time
