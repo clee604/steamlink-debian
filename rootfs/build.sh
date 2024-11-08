@@ -24,6 +24,7 @@ sync
 mkdir /mnt/disk
 mount "${LOOP_DEV}p1" /mnt/disk
 tar -xpf rootfs.tar -C /mnt/disk/
+rm -rf /mnt/disk/.dockerenv
 umount -l /mnt/disk
 
 # Detach the loop device
